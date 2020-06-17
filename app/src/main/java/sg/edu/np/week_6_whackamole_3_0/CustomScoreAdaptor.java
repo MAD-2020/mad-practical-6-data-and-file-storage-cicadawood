@@ -42,9 +42,21 @@ public class CustomScoreAdaptor extends RecyclerView.Adapter<CustomScoreViewHold
          */
     }
 
-    public int getItemCount(){
+    private final int limit = 5;
+
+    @Override
+    public int getItemCount() {
         /* Hint:
         This method returns the the size of the overall data.
          */
+        if(ad_list.size() > limit){
+            return limit;
+        }
+        else
+        {
+            return ad_list.size();
+        }
+
     }
+
 }

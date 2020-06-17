@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">Week_6_WhackAMole_3_0</string>
+    <string name="whack_a_mole">Whack A Mole !</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">LOGIN</string>
+    <string name="new_user_click_here">New User? Click Here</string>
+    <string name="create_new_user">Create New User</string>
+    <string name="cancel">CANCEL</string>
+    <string name="create">CREATE</string>
+    <string name="pick_a_level_to_begin">Pick a level to begin!</string>
+    <string name="highest_score_x">Highest Score: x</string>
+    <string name="level_x">Level X</string>
+    <string name="back">BACK</string>
+    <string name="score">Score</string>
+
 </resources>

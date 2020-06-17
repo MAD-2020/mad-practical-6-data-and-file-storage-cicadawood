@@ -2,19 +2,13 @@ package sg.edu.np.week_6_whackamole_3_0;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.Random;
 
-public class Main4Activity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity {
 
     /* Hint:
         1. This creates the Whack-A-Mole layout and starts a countdown to ready the user
@@ -66,7 +60,7 @@ public class Main4Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main4);
+        setContentView(R.layout.activity_game);
         /*Hint:
             This starts the countdown timers one at a time and prepares the user.
             This also prepares level difficulty.

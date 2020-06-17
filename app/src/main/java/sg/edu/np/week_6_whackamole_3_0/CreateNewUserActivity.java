@@ -2,16 +2,9 @@ package sg.edu.np.week_6_whackamole_3_0;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
-import java.util.ArrayList;
 
-public class Main2Activity extends AppCompatActivity {
+public class CreateNewUserActivity extends AppCompatActivity {
     /* Hint:
         1. This is the create new user page for user to log in
         2. The user can enter - Username and Password
@@ -30,7 +23,7 @@ public class Main2Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.activity_create_new_user);
 
         /* Hint:
             This prepares the create and cancel account buttons and interacts with the database to determine
