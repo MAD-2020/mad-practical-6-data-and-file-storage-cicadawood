@@ -13,6 +13,9 @@ public class CustomScoreViewHolder extends RecyclerView.ViewHolder {
      */
     private static final String FILENAME = "CustomScoreViewHolder.java";
     private static final String TAG = "Whack-A-Mole3.0!";
+    TextView levelNoTxtView;
+    TextView highestScoreTxtView;
+
 
     public CustomScoreViewHolder(final View itemView){
         super(itemView);
@@ -20,5 +23,8 @@ public class CustomScoreViewHolder extends RecyclerView.ViewHolder {
         /* Hint:
         This method dictates the viewholder contents and links the widget to the objects for manipulation.
          */
+
+        levelNoTxtView = itemView.findViewById(R.id.levelNoTxtView);
+        highestScoreTxtView = itemView.findViewById(R.id.highestScoreTxtView);
     }
 }

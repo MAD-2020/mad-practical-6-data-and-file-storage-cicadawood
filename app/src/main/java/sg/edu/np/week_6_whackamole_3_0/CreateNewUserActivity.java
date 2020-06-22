@@ -2,7 +2,15 @@ package sg.edu.np.week_6_whackamole_3_0;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class CreateNewUserActivity extends AppCompatActivity {
     /* Hint:
@@ -17,8 +25,14 @@ public class CreateNewUserActivity extends AppCompatActivity {
      */
 
 
-    private static final String FILENAME = "Main2Activity.java";
+    private static final String FILENAME = "CreateNewUserActivity.java";
     private static final String TAG = "Whack-A-Mole3.0!";
+
+    private EditText createUsernameEditTxt;
+    private EditText createPwEditTxt;
+    private Button cancelBtn;
+    private Button createBtn;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +50,55 @@ public class CreateNewUserActivity extends AppCompatActivity {
             Log.v(TAG, FILENAME + ": User already exist during new user creation!");
 
          */
+        createUsernameEditTxt = findViewById(R.id.createUsernameEditTxt);
+        createPwEditTxt = findViewById(R.id.createPWEditTxt);
+        cancelBtn = findViewById(R.id.cancelBtn);
+        createBtn = findViewById(R.id.createBtn);
+
+        cancelBtn.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CreateNewUserActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        createBtn.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                String username = createUsernameEditTxt.getText().toString();
+                String password = createPwEditTxt.getText().toString();
+
+                if ((!username.isEmpty())&& (!password.isEmpty())){
+                    MyDBHandler handler = new MyDBHandler (CreateNewUserActivity.this, null, null, 1);
+                    UserData userData = handler.findUser(username);
+                    if (userData==null){
+                        ArrayList<Integer> levels = new ArrayList<Integer>();
+                        ArrayList<Integer> scores = new ArrayList<Integer>();
+
+                        for (int i=0; i<10;i++){
+                            levels.add(i+1);
+                            scores.add(0);
+                        }
+                        UserData newUser = new UserData(username,password,levels,scores);
+                        handler.addUser(newUser);
+                        Toast.makeText(CreateNewUserActivity.this, "User Created Successfully.", Toast.LENGTH_SHORT).show();
+                        Log.v(TAG, FILENAME + ": New user created successfully!");
+                        Intent intent = new Intent(CreateNewUserActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                    }
+                    else{
+                        Toast.makeText(CreateNewUserActivity.this, "User Already Exists.\nPlease Try Again.", Toast.LENGTH_SHORT).show();
+                        Log.v(TAG, FILENAME + ": User already exist during new user creation!");
+                    }
+                }
+                else{
+                    Toast.makeText(CreateNewUserActivity.this, "Empty Username or Password!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     protected void onStop() {

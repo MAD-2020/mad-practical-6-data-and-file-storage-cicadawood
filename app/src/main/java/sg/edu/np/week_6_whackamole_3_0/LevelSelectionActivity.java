@@ -1,8 +1,14 @@
 package sg.edu.np.week_6_whackamole_3_0;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 public class LevelSelectionActivity extends AppCompatActivity {
     /* Hint:
@@ -18,8 +24,13 @@ public class LevelSelectionActivity extends AppCompatActivity {
             e. Each location of the mole is randomised.
         5. There is an option return to the login page.
      */
-    private static final String FILENAME = "Main3Activity.java";
+    private static final String FILENAME = "LevelSelectionActivity.java";
     private static final String TAG = "Whack-A-Mole3.0!";
+    private Button backToLoginBtn;
+    private RecyclerView recyclerView;
+    private CustomScoreAdaptor adaptor;
+    private UserData loginUser;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +42,31 @@ public class LevelSelectionActivity extends AppCompatActivity {
 
         Log.v(TAG, FILENAME + ": Show level for User: "+ userName);
          */
+        backToLoginBtn = findViewById(R.id.backToLoginBtn);
+
+        MyDBHandler handler = new MyDBHandler(this, null, null, 1);
+        Intent receiveIntent = getIntent();
+        String username = receiveIntent.getStringExtra("username"); //never get correct username
+        loginUser = handler.findUser(username);
+
+        recyclerView = findViewById(R.id.recyclerView);
+        adaptor = new CustomScoreAdaptor(loginUser);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setAdapter(adaptor);
+        recyclerView.setLayoutManager(layoutManager);
+
+        Log.v(TAG, FILENAME + ": Show level for User: "+ username);
+
+        backToLoginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LevelSelectionActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+
     }
 
     @Override

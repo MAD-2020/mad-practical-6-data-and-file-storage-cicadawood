@@ -2,9 +2,14 @@ package sg.edu.np.week_6_whackamole_3_0;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Random;
 
@@ -30,6 +35,17 @@ public class GameActivity extends AppCompatActivity {
     private static final String TAG = "Whack-A-Mole3.0!";
     CountDownTimer readyTimer;
     CountDownTimer newMolePlaceTimer;
+    private MyDBHandler handler;
+    private Button backToSelectionBtn;
+    private static final int[] btnIDArray = {R.id.button0,R.id.button1,R.id.button2,R.id.button3,R.id.button4,
+            R.id.button5,R.id.button6,R.id.button7,R.id.button8};
+
+    private Button[] buttonList = new Button[btnIDArray.length];
+    private int gameScore = 0;
+    private int currentLevel;
+    private TextView scoreTxtView;
+    private int highestScore;
+    private String username;
 
     private void readyTimer(){
         /*  HINT:
@@ -41,6 +57,22 @@ public class GameActivity extends AppCompatActivity {
             belongs here.
             This timer countdown from 10 seconds to 0 seconds and stops after "GO!" is shown.
          */
+        readyTimer = new CountDownTimer(10000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                Toast.makeText(GameActivity.this, "Get Ready in " + millisUntilFinished / 1000 + "seconds", Toast.LENGTH_SHORT).show();
+                Log.v(TAG, "Ready CountDown!" + millisUntilFinished / 1000);
+
+            }
+            @Override
+            public void onFinish() {
+                Toast.makeText(GameActivity.this, "GO!", Toast.LENGTH_SHORT).show();
+                Log.v(TAG, "Ready Countdown Complete");
+                readyTimer.cancel();
+                placeMoleTimer();
+            }
+        };
+        readyTimer.start();
     }
     private void placeMoleTimer(){
         /* HINT:
@@ -50,12 +82,21 @@ public class GameActivity extends AppCompatActivity {
            belongs here.
            This is an infinite countdown timer.
          */
+        int countDownInterval = (currentLevel * 1000) - ((currentLevel-1)*1100) ;
+        newMolePlaceTimer = new CountDownTimer(Long.MAX_VALUE,countDownInterval) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                setNewMole(currentLevel);
+                Log.v(TAG, "New Mole Location!");
+            }
+            @Override
+            public void onFinish() {
+                newMolePlaceTimer.cancel();
+            }
+        };
+        newMolePlaceTimer.start();
     }
-    private static final int[] BUTTON_IDS = {
-            /* HINT:
-                Stores the 9 buttons IDs here for those who wishes to use array to create all 9 buttons.
-                You may use if you wish to change or remove to suit your codes.*/
-    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,12 +112,44 @@ public class GameActivity extends AppCompatActivity {
          */
 
 
-        for(final int id : BUTTON_IDS){
+        //for(final int id : btnIDArray){
             /*  HINT:
             This creates a for loop to populate all 9 buttons with listeners.
             You may use if you wish to remove or change to suit your codes.
             */
+        //}
+        scoreTxtView = findViewById(R.id.scoreTxtView);
+        Intent receiveIntent = getIntent();
+        username = receiveIntent.getStringExtra("username");
+        currentLevel = receiveIntent.getIntExtra("level", 0);
+        highestScore = receiveIntent.getIntExtra("score", 0);
+
+        for(int i=0; i<btnIDArray.length;i++){
+            final int index = i;
+            buttonList[i]=(Button)findViewById(btnIDArray[i]);
+            buttonList[i].setText("O");
+            buttonList[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    doCheck(buttonList[index]);
+                }
+            });
         }
+        readyTimer();
+        placeMoleTimer();
+        backToSelectionBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+
+                if (gameScore > highestScore)
+                {
+                    updateUserScore();
+                }
+                Intent intent2 = new Intent(GameActivity.this, LevelSelectionActivity.class);
+                intent2.putExtra("username", username);
+                startActivity(intent2);
+            }
+        });
     }
     @Override
     protected void onStart(){
@@ -92,9 +165,19 @@ public class GameActivity extends AppCompatActivity {
             belongs here.
         */
 
+        if (checkButton.getText()=="*"){
+            gameScore+=1;
+            Log.v(TAG, "Hit, score added!");
+        }
+        else{
+            gameScore-=1;
+            Log.v(TAG, "Missed, point deducted!");
+        }
+        scoreTxtView.setText(String.valueOf(gameScore));
+
     }
 
-    public void setNewMole()
+    public void setNewMole(int level)
     {
         /* Hint:
             Clears the previous mole location and gets a new random location of the next mole location.
@@ -102,18 +185,36 @@ public class GameActivity extends AppCompatActivity {
          */
         Random ran = new Random();
         int randomLocation = ran.nextInt(9);
+        for (Button i :buttonList){
+            i.setText("O");
+        }
+        buttonList[randomLocation].setText("*");
 
+        if (level > 5 ){
+            int randomLocation2 = ran.nextInt(9);
+            while (randomLocation2 == randomLocation){
+                randomLocation2 = ran.nextInt(9);
+            }
+            buttonList[randomLocation2].setText("*");
+        }
     }
 
     private void updateUserScore()
     {
-
      /* Hint:
         This updates the user score to the database if needed. Also stops the timers.
         Log.v(TAG, FILENAME + ": Update User Score...");
       */
+
         newMolePlaceTimer.cancel();
         readyTimer.cancel();
+        Log.v(TAG, FILENAME + ": Update User Score...");
+        MyDBHandler handler = new MyDBHandler(this,null,null,1);
+        UserData currUserData = handler.findUser(username);
+        handler.deleteAccount(username);
+        currUserData.getScores().set(currentLevel-1,gameScore);
+        handler.addUser(currUserData);
+
     }
 
 }
