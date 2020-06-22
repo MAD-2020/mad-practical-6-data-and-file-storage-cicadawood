@@ -3,6 +3,7 @@ package sg.edu.np.week_6_whackamole_3_0;
 import android.content.Intent;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +16,7 @@ public class CustomScoreViewHolder extends RecyclerView.ViewHolder {
     private static final String TAG = "Whack-A-Mole3.0!";
     TextView levelNoTxtView;
     TextView highestScoreTxtView;
+    LinearLayout clickLayout;
 
 
     public CustomScoreViewHolder(final View itemView){
@@ -26,5 +28,6 @@ public class CustomScoreViewHolder extends RecyclerView.ViewHolder {
 
         levelNoTxtView = itemView.findViewById(R.id.levelNoTxtView);
         highestScoreTxtView = itemView.findViewById(R.id.highestScoreTxtView);
+        clickLayout = (LinearLayout) itemView.findViewById(R.id.clickLayout);
     }
 }

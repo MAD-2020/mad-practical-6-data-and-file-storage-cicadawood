@@ -121,8 +121,13 @@ public class GameActivity extends AppCompatActivity {
         scoreTxtView = findViewById(R.id.scoreTxtView);
         Intent receiveIntent = getIntent();
         username = receiveIntent.getStringExtra("username");
-        currentLevel = receiveIntent.getIntExtra("level", 0);
-        highestScore = receiveIntent.getIntExtra("score", 0);
+        //currentLevel = receiveIntent.getIntExtra("level", 0);
+       // highestScore = receiveIntent.getIntExtra("score", 0);
+        String level = receiveIntent.getStringExtra("level");
+        currentLevel = Integer.parseInt(level);
+        String scoreString = receiveIntent.getStringExtra("score");
+        highestScore = Integer.parseInt(scoreString);
+
 
         for(int i=0; i<btnIDArray.length;i++){
             final int index = i;

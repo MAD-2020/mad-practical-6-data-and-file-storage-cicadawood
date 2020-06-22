@@ -71,7 +71,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
             "(" + COLUMN_USERNAME + " TEXT,"
             + COLUMN_PASSWORD + " TEXT,"
             + COLUMN_LEVELS + " INTEGER,"
-            + COLUMN_LEVELS + " INTEGER,"
             + COLUMN_SCORES + " INTEGER " +")";
 
         db.execSQL(CREATE_USERS_TABLE);

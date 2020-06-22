@@ -78,8 +78,8 @@ public class CreateNewUserActivity extends AppCompatActivity {
                         ArrayList<Integer> levels = new ArrayList<Integer>();
                         ArrayList<Integer> scores = new ArrayList<Integer>();
 
-                        for (int i=0; i<10;i++){
-                            levels.add(i+1);
+                        for (Integer i=1; i<11;i++){
+                            levels.add(i);
                             scores.add(0);
                         }
                         UserData newUser = new UserData(username,password,levels,scores);

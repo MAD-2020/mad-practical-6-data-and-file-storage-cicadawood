@@ -19,17 +19,16 @@ public class CustomScoreAdaptor extends RecyclerView.Adapter<CustomScoreViewHold
      */
     private static final String FILENAME = "CustomScoreAdaptor.java";
     private static final String TAG = "Whack-A-Mole3.0!";
-    UserData user;
-    ArrayList<Integer> levelList;
-    ArrayList<Integer> scoreList;
+    UserData userdata;
+
+
 
     public CustomScoreAdaptor(UserData userdata){
         /* Hint:
         This method takes in the data and readies it for processing.
          */
-        this.user = userdata;
-        this.levelList = user.getLevels();
-        this.scoreList = user.getScores();
+        this.userdata = userdata;
+
     }
 
     @NonNull
@@ -50,20 +49,23 @@ public class CustomScoreAdaptor extends RecyclerView.Adapter<CustomScoreViewHold
         Log.v(TAG, FILENAME + " Showing level " + level_list.get(position) + " with highest score: " + score_list.get(position));
         Log.v(TAG, FILENAME+ ": Load level " + position +" for: " + list_members.getMyUserName());
          */
-        final int levelNo = levelList.get(position);
-        final int score = scoreList.get(position);
-        holder.levelNoTxtView.setText("Level " + String.valueOf(levelNo));
-        holder.highestScoreTxtView.setText("Highest Score: "+String.valueOf(score));
+        final String levelNo = String.valueOf(userdata.getLevels().get(position));
+        final String score = String.valueOf(userdata.getScores().get(position));
+        holder.levelNoTxtView.setText("Level"+levelNo);
+        holder.highestScoreTxtView.setText("Highest score: " + score);
+
+        //holder.levelNoTxtView.setText("Level " + String.valueOf(levelNo));
+        //holder.highestScoreTxtView.setText("Highest Score: "+String.valueOf(score));
         Log.v(TAG, FILENAME + " Showing level " + levelNo + " with highest score: " + score);
-        holder.itemView.setOnClickListener(new View.OnClickListener(){
+        holder.clickLayout.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 Intent intent = new Intent(v.getContext(),GameActivity.class);
-                intent.putExtra("username",user.getMyUserName());
+                intent.putExtra("username",userdata.getMyUserName());
                 intent.putExtra("level",levelNo);
                 intent.putExtra("score",score);
                 v.getContext().startActivity(intent);
-                Log.v(TAG, FILENAME+ ": Load level " + (position+1) +" for: " + user.getMyUserName());
+                Log.v(TAG, FILENAME+ ": Load level " + (position+1) +" for: " + userdata.getMyUserName());
 
             }
         });
@@ -80,7 +82,7 @@ public class CustomScoreAdaptor extends RecyclerView.Adapter<CustomScoreViewHold
         /* Hint:
         This method returns the the size of the overall data.
          */
-        return levelList.size();
+        return userdata.getLevels().size();
 
 
     }
